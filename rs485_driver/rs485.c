@@ -63,10 +63,10 @@ int send_frame(comm_frame_t *frame)
     fill_send_buf(frame);
 
     ret = write(fd, rs485_send_buf, SEND_BUF_LEN);
-    if (ret < 0 || ret != SEND_BUF_LEN)
+    if ((ret < 0) || (ret != SEND_BUF_LEN))
     {
         printf("send frame failed.\n");
-        tcflush(fd,TCOFLUSH); 
+        tcflush(fd, TCOFLUSH); 
         return -1;
     }
 
@@ -119,6 +119,7 @@ int rcv_frame(comm_frame_t *frame)
     if (FD_ISSET(fd, &fs_read))
     {
 	memset(rs485_rcv_buf, 0, RCV_BUF_LEN);
+
         do
         {
             size = read(fd, rs485_rcv_buf + length, RCV_BUF_LEN - length);
