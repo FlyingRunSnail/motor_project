@@ -9,6 +9,8 @@ typedef enum{eDirClockWise = 0,
              eDirAntiClockWise, 
              eDirMax}rotate_direct_t;
 
+int motor_init(void);
+void motor_exit(void);
 int motor_start(motor_id_t motor, rotate_direct_t dir, int nsteps);
 int motor_stop(motor_id_t motor);
 int get_motor_current_pos(motor_id_t motor, int *npos);

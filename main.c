@@ -1,15 +1,16 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "motor.h"
 
 static void usage(void)
 {
-    printf("usage:\
-            start 0 0 3200  #start motor rotate 3200 as C.W\
-            stop 0          #stop motor rotate\
-            get 0           #get motor current pos\
-            set 0           #set motor current pos\
-            \r\n");
+    printf("usage:\n \
+            start 0 0 3200  #start motor rotate 3200 as C.W\n \
+            stop 0          #stop motor rotate\n \
+            get 0           #get motor current pos\n \
+            set 0           #set motor current pos\n \
+            \n");
 }
 
 int main(int argc, char **argv)

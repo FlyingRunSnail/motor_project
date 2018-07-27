@@ -56,8 +56,8 @@ typedef struct comm_frame
     unsigned char start;
     unsigned char addr;
     unsigned char command;
-    unsigned int  data;
     unsigned char checksum;
+    unsigned int  data;
 
 }comm_frame_t;
 

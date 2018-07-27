@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include "motor.h"
+#include "rs485.h"
 #include "protocol.h"
 
 int motor_init(void)
 {
     printf("motor init start...\n");
-    rs485_init("");
+    rs485_init("/dev/ttyUSB0");
 
     // 马达控制器参数设置
     // TODO:
@@ -31,6 +32,7 @@ int motor_start(motor_id_t motor, rotate_direct_t dir, int nsteps)
     if (ret < 0)
     {
         printf("send frame failed.\n");
+        free_frame(frame);
         return -1;
     }
 
@@ -38,6 +40,7 @@ int motor_start(motor_id_t motor, rotate_direct_t dir, int nsteps)
     if (ret < 0)
     {
         printf("rcv frame failed.\n");
+        free_frame(frame);
         return -1;
     }
 
@@ -46,6 +49,7 @@ int motor_start(motor_id_t motor, rotate_direct_t dir, int nsteps)
     if (!frame)
     {
         printf("modify frame failed.\n");
+        free_frame(frame);
         return -1;
     } 
 
@@ -53,6 +57,7 @@ int motor_start(motor_id_t motor, rotate_direct_t dir, int nsteps)
     if (ret < 0)
     {
         printf("send frame failed.\n");
+        free_frame(frame);
         return -1;
     }
 
@@ -60,6 +65,7 @@ int motor_start(motor_id_t motor, rotate_direct_t dir, int nsteps)
     if (ret < 0)
     {
         printf("rcv frame failed.\n");
+        free_frame(frame);
         return -1;
     }
 

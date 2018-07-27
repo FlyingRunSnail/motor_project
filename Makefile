@@ -13,7 +13,7 @@ all:$(OBJS)
 	$(CC) -o $(TARGET) $(LDFLAGS) $(OBJS)
 
 .c.o:
-	$(CC) -c -o $*.o $< $(INCLUDES)
+	$(CC) -c -o $*.o $< $(INCLUDES) $(CFLAGS)
 
 .PHONY:all clean
 
