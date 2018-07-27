@@ -3,7 +3,7 @@
 
 #define FRAME_HEAD 0xA5
 
-enum(
+enum{
     eCMD_0x73 = 0x73,
     eCMD_0x6d = 0x6d,
     eCMD_0x70 = 0x70,
@@ -28,7 +28,7 @@ enum(
     eCMD_0x62 = 0x62,
     eCMD_0x78 = 0x78,
     eCMD_0x79 = 0x79,
-    eCMD_0x5a = 0x5a,
+    //eCMD_0x5a = 0x5a,
     eCMD_0x75 = 0x75,
     eCMD_0x49 = 0x49,
     eCMD_0x4a = 0x4a,
@@ -48,7 +48,7 @@ enum(
     eCMD_0x5a = 0x5a,
 
     eCMD_MAX
-    ); 
+    }; 
 
 
 typedef struct comm_frame
@@ -62,6 +62,10 @@ typedef struct comm_frame
 }comm_frame_t;
 
 comm_frame_t * alloc_frame(unsigned char addr, unsigned char command, unsigned int data);
+comm_frame_t * modify_frame(comm_frame_t *frame, unsigned char addr, unsigned char command, unsigned int data);
 void free_frame(comm_frame_t *frame);
+
+void dump_frame(comm_frame_t *frame);
+int check_frame(comm_frame_t *frame);
 
 #endif

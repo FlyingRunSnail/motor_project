@@ -1,13 +1,13 @@
 #ifndef __MOTOR_DRIVER__
 #define __MOTOR_DRIVER__
 
-typedef enum(eMotor_h_dir = 0, 
+typedef enum{eMotor_h_dir = 0, 
              eMotor_v_dir, 
-             eMotor_max)motor_id_t;
+             eMotor_max}motor_id_t;
 
-typedef enum(eDirClockWise = 0, 
+typedef enum{eDirClockWise = 0, 
              eDirAntiClockWise, 
-             eDirMax)rotate_direct_t;
+             eDirMax}rotate_direct_t;
 
 int motor_start(motor_id_t motor, rotate_direct_t dir, int nsteps);
 int motor_stop(motor_id_t motor);

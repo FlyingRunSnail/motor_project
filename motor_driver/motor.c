@@ -1,8 +1,16 @@
-#include "motor_driver.h"
+#include <stdio.h>
+#include "motor.h"
 #include "protocol.h"
 
 int motor_init(void)
 {
+    printf("motor init start...\n");
+    rs485_init("");
+
+    // 马达控制器参数设置
+    // TODO:
+
+    printf("motor init end...\n");
     return 0;
 }
 
@@ -26,14 +34,14 @@ int motor_start(motor_id_t motor, rotate_direct_t dir, int nsteps)
         return -1;
     }
 
-    ret = rev_frame(frame);
+    ret = rcv_frame(frame);
     if (ret < 0)
     {
         printf("rcv frame failed.\n");
         return -1;
     }
 
-    // 设置转动给定步进
+    // 设置转动给定步长
     frame = modify_frame(frame, 0xff, eCMD_0x73, nsteps);
     if (!frame)
     {
@@ -48,7 +56,7 @@ int motor_start(motor_id_t motor, rotate_direct_t dir, int nsteps)
         return -1;
     }
 
-    ret = rev_frame(frame);
+    ret = rcv_frame(frame);
     if (ret < 0)
     {
         printf("rcv frame failed.\n");
@@ -91,5 +99,7 @@ int get_motor_status_2(motor_id_t motor, int *status)
 
 void motor_exit(void)
 {
+    rs485_exit();
     return ;
 }
+

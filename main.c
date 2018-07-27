@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include <string.h>
-#include "motor_driver.h"
+#include "motor.h"
 
 static void usage(void)
 {
-    printf("usage:
-            start 0 0 3200  #start motor rotate 3200 as C.W
-            stop 0          #stop motor rotate
-            get 0           #get motor current pos
-            set 0           #set motor current pos
+    printf("usage:\
+            start 0 0 3200  #start motor rotate 3200 as C.W\
+            stop 0          #stop motor rotate\
+            get 0           #get motor current pos\
+            set 0           #set motor current pos\
             \r\n");
 }
 
@@ -16,7 +16,7 @@ int main(int argc, char **argv)
 {
     int ret;
     motor_id_t motor;
-    motor_dir_t dir;
+    rotate_direct_t dir;
     int nsteps = 3200;
     int npos = 0;
     
@@ -50,7 +50,7 @@ int main(int argc, char **argv)
     else if (strcmp(argv[1], "set") == 0)
     {
         ret = set_motor_current_pos(motor, npos);
-        printf("motor %d set current pos %d and ret %d\n", motor, pos, ret);
+        printf("motor %d set current pos %d and ret %d\n", motor, npos, ret);
     }
     else
     {
