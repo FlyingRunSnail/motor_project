@@ -7,6 +7,7 @@
 #include <sys/time.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <pthread.h>
 
 #include "rs485.h"
 #include "serial.h"
@@ -18,6 +19,9 @@
 static unsigned char rs485_send_buf[SEND_BUF_LEN] = {0};
 static unsigned char rs485_rcv_buf[RCV_BUF_LEN] = {0};
 
+static pthread_mutex_t rs485_read_lock;
+static pthread_mutex_t rs485_write_lock;
+
 int rs485_init(const char *dev)
 {
     int fd = open_serial(dev, 9600, 8, 'N', 1); 
@@ -26,6 +30,9 @@ int rs485_init(const char *dev)
         printf("open serial %s failed.\n", dev);
         return -1;
     }
+
+    pthread_mutex_init(&rs485_read_lock, NULL);
+    pthread_mutex_init(&rs485_write_lock, NULL);
 
     return 0;
 }
@@ -60,15 +67,20 @@ int send_frame(comm_frame_t *frame)
         return -1;
     }
 
+    pthread_mutex_lock(&rs485_write_lock);
+
     fill_send_buf(frame);
 
     ret = write(fd, rs485_send_buf, SEND_BUF_LEN);
     if ((ret < 0) || (ret != SEND_BUF_LEN))
     {
+        pthread_mutex_unlock(&rs485_write_lock);
         printf("send frame failed.\n");
         tcflush(fd, TCOFLUSH); 
         return -1;
     }
+
+    pthread_mutex_unlock(&rs485_write_lock);
 
     return ret;
 }
@@ -118,6 +130,8 @@ int rcv_frame(comm_frame_t *frame)
 
     if (FD_ISSET(fd, &fs_read))
     {
+        pthread_mutex_lock(&rs485_read_lock);
+
 	memset(rs485_rcv_buf, 0, RCV_BUF_LEN);
 
         do
@@ -135,6 +149,7 @@ int rcv_frame(comm_frame_t *frame)
 
         if (length < sizeof(*frame))
         {
+	    pthread_mutex_unlock(&rs485_read_lock);
             printf("length: %d is not equal %d\n", length, (int)sizeof(comm_frame_t));
             return -1;
         }
@@ -148,6 +163,7 @@ int rcv_frame(comm_frame_t *frame)
                         rs485_rcv_buf[3]);
 
         frame->checksum = rs485_rcv_buf[7];
+	pthread_mutex_unlock(&rs485_read_lock);
 
         if (check_frame(frame) != 0)
         {
@@ -165,5 +181,10 @@ int rcv_frame(comm_frame_t *frame)
 void rs485_exit(void)
 {
     close_serial();
+
+    pthread_mutex_destroy(&rs485_read_lock);
+    pthread_mutex_destroy(&rs485_write_lock);
+
     return ;
 }
+

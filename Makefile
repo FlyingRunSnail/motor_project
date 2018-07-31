@@ -1,7 +1,7 @@
 
-CC:=gcc
-CFLAGS:=-g -Werror -Wall
-LDFLAGS:=
+CC:=$(CROSS_COMPILE)gcc
+CFLAGS:=-g -Werror -Wall -pthread
+LDFLAGS:= -lm -pthread
 TARGET:=motor
 RM:=rm
 INCLUDES=-Imotor_driver/ 

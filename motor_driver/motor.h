@@ -11,10 +11,12 @@ typedef enum{eDirClockWise = 0,
 
 int motor_init(void);
 void motor_exit(void);
-int motor_start(motor_id_t motor, rotate_direct_t dir, int nsteps);
+//int motor_start(motor_id_t motor, rotate_direct_t dir, int nsteps);
+int motor_start(motor_id_t motor, rotate_direct_t dir, float angles, float *ret_angles);
 int motor_stop(motor_id_t motor);
 int get_motor_current_pos(motor_id_t motor, int *npos);
 int set_motor_current_pos(motor_id_t motor, int npos);
+int get_motor_stall_pos(motor_id_t motor, int *npos);
 int get_motor_status_1(motor_id_t motor, int *status);
 int get_motor_status_2(motor_id_t motor, int *status);
 
